@@ -1,8 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
-import { useState } from "react";
+import React, { useState } from "react";
+import { Service as service } from "./Service.js";
 
-function SinglePayoff({userInput, onUserInput}) {
+import './App.css';
+
+const SinglePayoff = ({userInput, onUserInput}) => {
   return (
     <input 
       type="text" 
@@ -12,73 +13,127 @@ function SinglePayoff({userInput, onUserInput}) {
   )
 }
 
-function Outcome({userInputs}) {
-  const user1 = userInputs.value.user1;
-  const user2 = userInputs.value.user2;
-  const max1a = Math.max(user1[0],user1[2]);
-  const max1b = Math.max(user1[1],user1[3]);
-  const max2a = Math.max(user2[0],user2[1]);
-  const max2b = Math.max(user2[2],user2[3]);
-  if (max1a === user1[0] && max1b === user1[1] && max2a === user2[0] && max2b === user2[2]) {
-    return <p>Abate, Abate is the dominant strategy</p>;
-  } else if (max1a === user1[2] && max1b === user1[3] && max2a === user2[1] && max2b === user2[3]) {
-    return <p>Pollute, Pollute is the dominant strategy</p>;
-  } else if (max1a === user1[0] && max1b === user1[1] && max2a === user2[1] && max2b === user2[3]) {
-    return <p>Abate, Pollute is the dominant strategy</p>;
-  } else if (max1a === user1[2] && max1b === user1[3] && max2a === user2[0] && max2b === user2[2]) {
-    return <p>Pollute, Abate is the dominant strategy</p>;
-  } else {
-    return <p>There is no dominant strategy</p>;
-  }
+const Outcome = ({userInputs}) => {
+    return (<p>{service.determineOutputText(userInputs)}</p>);
 }
 
-function TwoXTwoForm({userInputs, handleChange}) {
-  const handleSubmit = (event) => {
-    alert('A name was submitted: ' + userInputs.value);
-    event.preventDefault();
-  }
-
+const NormalFrom = ({userInputs}) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        User 1 userInputs:
-        <input type="number" value={userInputs.value.user1[0]} onChange={(e) => handleChange('user1', 0, e.target.value)} />
-        <input type="number" value={userInputs.value.user1[1]} onChange={(e) => handleChange('user1', 1, e.target.value)} />
-        <input type="number" value={userInputs.value.user1[2]} onChange={(e) => handleChange('user1', 2, e.target.value)} />
-        <input type="number" value={userInputs.value.user1[3]} onChange={(e) => handleChange('user1', 3, e.target.value)} />
-      </label>
-      <label>
-        User 2 userInputs:
-        <input type="number" value={userInputs.value.user2[0]} onChange={(e) => handleChange('user2', 0, e.target.value)} />
-        <input type="number" value={userInputs.value.user2[1]} onChange={(e) => handleChange('user2', 1, e.target.value)} />
-        <input type="number" value={userInputs.value.user2[2]} onChange={(e) => handleChange('user2', 2, e.target.value)} />
-        <input type="number" value={userInputs.value.user2[3]} onChange={(e) => handleChange('user2', 3, e.target.value)} />
-      </label>
-      <input type="submit" value="Submit" />
-    </form>
+    <div className="card">
+      <table>
+        <tbody>
+          <tr>
+              <th colSpan="2" rowSpan="2"></th>
+              <th colSpan="2">Community 2</th>
+          </tr>
+          <tr>
+              <th>Abate</th>
+              <th>Pollute</th>
+          </tr>
+          <tr>
+              <th rowSpan="2">Community 1</th>
+              <th>Abate</th>
+              <td>{userInputs.user1[0]}, {userInputs.user2[0]}</td>
+              <td>{userInputs.user1[1]}, {userInputs.user2[1]}</td>
+          </tr>
+          <tr>
+              <th>Pollute</th>
+              <td>{userInputs.user1[2]}, {userInputs.user2[2]}</td>
+              <td>{userInputs.user1[3]}, {userInputs.user2[3]}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+const ResourcePool = ({resources}) => {
+  return (<div><span>Remaining resource pool at end of game: {resources}</span></div>)
+}
+
+const UserUtility = ({user1Utility, user2Utility, handleUtilityInputs}) => {
+  return (
+    <div className="card">
+      <form className="utilityForm">
+        Where does community one's value lie? 
+        <div className="slidecontainer">
+          <input type="range" value={user1Utility} onInput={(e) => handleUtilityInputs(0, parseInt(e.target.value))} min="60" max="140" className="slider"/>
+          <label className="env">Environment</label>
+          <label className="growth">Growth</label>
+          <p>{user1Utility}</p>
+        </div>
+        Where does community two's value lie?
+        <div className="slidecontainer">
+          <input type="range" value={user2Utility} onInput={(e) => handleUtilityInputs(1, parseInt(e.target.value))} min="60" max="140" className="slider"/>
+          <label className="env">Environment</label>
+          <label className="growth">Growth</label>
+          <p>{user2Utility}</p>
+        </div>
+      </form>
+    </div>
   );
 }
 
-export default function App() {
-  const [userInputs, setUserInputs] = useState({value: STARTING_INPUT.prisoners});
+const Main = ({startingValue}) => {
+  const [userInputs, setUserInputs] = useState({user1: [0,0,0,0], user2: [0,0,0,0]});
+  const [resources, setResources] = useState(100);
+  const [user1Utility, setUser1Utility] = useState(100);
+  const [user2Utility, setUser2Utility] = useState(100);
 
   const handleChange = (userName, item, value) => {
-    userInputs.value[userName][item] = parseInt(value);
-    setUserInputs({value: userInputs.value});
+    userInputs[userName][item] = parseInt(value);
+    setUserInputs(userInputs);
+  }
+
+  const handleUtilityInputs = (user, utility) => {
+    if (user) {
+      setUser2Utility(utility);
+      userInputs.user2 = [100-(utility), (utility)-100, 100-(utility), (utility)-100];
+    } else {
+      setUser1Utility(utility);
+      userInputs.user1 = [100-(utility), 100-(utility), (utility)-100, (utility)-100]
+    };
+    setUserInputs(userInputs);
+  }
+  const submitUtilities = (event) => {
+    event.preventDefault();
+    setResources(service.calculateEndResources(user1Utility, user2Utility));
   }
 
   return (
-    <div>
-      <TwoXTwoForm 
+    <div className="page">
+      <div className="card">
+        <UserUtility 
+          user1Utility={user1Utility}
+          user2Utility={user2Utility}
+          handleUtilityInputs={handleUtilityInputs}
+        />
+      </div>
+      <NormalFrom
         userInputs={userInputs}
-        handleChange={handleChange}
       />
-      <Outcome
+      <Outcome 
         userInputs={userInputs}
       />
+      <ResourcePool 
+        resources={resources}
+      />
+      <form onSubmit={(e) => submitUtilities(e)}>
+        <button type="submit">Submit</button>
+      </form>
     </div>
   )
 };
 
 
-const STARTING_INPUT = {prisoners: {user1: [3,1,4,2], user2: [3,4,1,2]}};
+const STARTING_INPUT = {
+  prisoners: {user1: [10,-40,40,-10], user2: [10,40,-40,-10]},
+  commons: {user1: [3,1,4,2], user2: [3,4,1,2]},
+  chicken: {user1: [3,1,4,2], user2: [3,4,1,2]},
+  harmony: {user1: [3,1,4,2], user2: [3,4,1,2]},
+  stagHunt: {user1: [3,1,4,2], user2: [3,4,1,2]},
+};
+
+export default function App() {
+  return <Main startingValue={STARTING_INPUT} />;
+}
