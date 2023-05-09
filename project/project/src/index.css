@@ -5,40 +5,116 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 1.5rem 2.25rem;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-
-table, th, td {
+table {
+  margin: auto;
+  width: 1%;
+}
+th, td {
+  padding: .625rem 1rem;
+  width: 1%;
+  white-space: nowrap;
   border: 1px solid black;
   border-collapse: collapse;
+  min-width: 100px;
+  background-color: #8FAADC;
+  color: black;
 }
-
+button.preset {
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+  width: calc(33% - 20px);
+}
+.header {
+  grid-area: header;
+}
+.popover {
+  width: 40rem;
+}
+.container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "header header"
+    "row0 row0"
+    "row1a row1b"
+    "row2 row2"
+    "row3 row3";
+}
+.submit {
+  margin:0 auto;
+  display:block;
+  text-align:center;  
+  grid-area: row0;
+}
+.submit button {
+  background-color: #2F5597;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  width: 20rem;
+}
+.submit h6 {
+  margin: 0;
+  line-height: 1;
+}
+.normalForm {
+  grid-area: row1a;
+}
+.presets {
+  grid-area: row1b;
+}
+.utilityContainer {
+  grid-area: row2;
+}
+.results {
+  grid-area: row3;
+}
+.dark-blue {
+  background-color: #2F5597;
+  color: white;
+}
+.light-blue {
+  background-color: #8FAADC;
+  color: black;
+}
 .slidecontainer {
-  width: calc(100% - 20px); /* Width of the outside container */
+  width: 100%; /* Width of the outside container */
 }
 .card {
-  width: 40%;
+  border: 0;
+  padding: 2rem 1rem 0 1rem;
 }
-.utilityForm label {
+.utilityForm {
+  width: 50%;
+  float: left;
+  padding: 1rem 1rem 0;
+}
+.utilityForm span {
+  font-size: 1.125rem;
   width: 50%;
   float: left;
 }
 .env {
+  width: 50%;
   text-align: left;
 }
 .growth {
+  width: 50%;
   text-align: right;
 }
 .slider {
   -webkit-appearance: none;
   width: 100%;
-  height: 15px;
-  border-radius: 5px;  
+  height: 1rem;
+  border-radius: .3125rem;  
   background: #d3d3d3;
   outline: none;
   opacity: 0.7;
@@ -49,17 +125,42 @@ table, th, td {
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 25px;
-  height: 25px;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%; 
   background: #04AA6D;
   cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
   background: #04AA6D;
   cursor: pointer;
+}
+.tree-item path {
+  stroke: #000;
+  stroke-width: 10px;
+}
+.tree-item.dead path {
+  fill: black;
+  fill-opacity: 0;
+  animation: ghost 5s linear;
+}
+.tree-item.alive path {
+  fill: black;
+  animation: fadeIn 5s;
+}
+.home {
+  animation: fadeIn 5s;
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes ghost {
+  0% { fill-opacity: 1; }
+  100% { fill-opacity: 0; }
 }
