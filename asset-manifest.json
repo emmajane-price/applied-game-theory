@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/applied-game-theory/static/css/main.cee58574.css",
-    "main.js": "/applied-game-theory/static/js/main.16a8a00d.js",
+    "main.css": "/applied-game-theory/static/css/main.556c90c6.css",
+    "main.js": "/applied-game-theory/static/js/main.38185365.js",
     "static/js/787.ec704a7a.chunk.js": "/applied-game-theory/static/js/787.ec704a7a.chunk.js",
     "index.html": "/applied-game-theory/index.html",
-    "main.cee58574.css.map": "/applied-game-theory/static/css/main.cee58574.css.map",
-    "main.16a8a00d.js.map": "/applied-game-theory/static/js/main.16a8a00d.js.map",
+    "main.556c90c6.css.map": "/applied-game-theory/static/css/main.556c90c6.css.map",
+    "main.38185365.js.map": "/applied-game-theory/static/js/main.38185365.js.map",
     "787.ec704a7a.chunk.js.map": "/applied-game-theory/static/js/787.ec704a7a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cee58574.css",
-    "static/js/main.16a8a00d.js"
+    "static/css/main.556c90c6.css",
+    "static/js/main.38185365.js"
   ]
 }
